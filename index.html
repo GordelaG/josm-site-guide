@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>JOSM Ground Guide | Guia de Desenho de Solo - VATSIM Brasil</title>
   <meta name="description"
-    content="Guia completo para criacao de desenhos de solo (ground layouts) no JOSM para aeroportos do VATSIM Brasil." />
+    content="Guia completo para criação de desenhos de solo (ground layouts) no JOSM para aeroportos do VATSIM Brasil." />
   <meta property="og:title" content="JOSM Ground Guide | Guia de Desenho de Solo" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -27,7 +27,7 @@
       </a>
       <nav class="nav-links" id="nav-links">
         <a href="#sobre" class="nav-link">Sobre</a>
-        <a href="#poligonos" class="nav-link">Poligonos</a>
+        <a href="#poligonos" class="nav-link">Polígonos</a>
         <a href="#tutorial" class="nav-link">Tutorial</a>
         <a href="#mapa" class="nav-link">Mapa</a>
       </nav>
@@ -35,7 +35,7 @@
     </div>
     <div class="mobile-menu" id="mobile-menu">
       <a href="#sobre" class="mobile-link">Sobre</a>
-      <a href="#poligonos" class="mobile-link">Poligonos</a>
+      <a href="#poligonos" class="mobile-link">Polígonos</a>
       <a href="#tutorial" class="mobile-link">Tutorial</a>
       <a href="#mapa" class="mobile-link">Mapa</a>
       <a href="#recursos" class="mobile-link">Recursos</a>
@@ -54,7 +54,7 @@
     <div class="hero-content">
       <div class="hero-badge" id="hero-badge">
         <span class="badge-dot"></span>
-        VATSIM Brasil &middot; Operacoes
+        VATSIM Brasil &middot; Operações
       </div>
       <h1 class="hero-title" id="hero-title">
         Guia de <span class="gradient-text">Desenho de Solo</span><br />no JOSM
@@ -64,7 +64,7 @@
         Do OSM ao QGIS &mdash; o guia completo para controllers e colaboradores.
       </p>
       <div class="hero-actions" id="hero-actions">
-        <a href="#poligonos" class="btn-hero-primary" id="btn-hero-start">Comecar Agora</a>
+        <a href="#poligonos" class="btn-hero-primary" id="btn-hero-start">Começar Agora</a>
         <a href="#tutorial" class="btn-hero-secondary" id="btn-hero-tutorial">Ver Tutorial</a>
       </div>
       <div class="hero-stats" id="hero-stats">
@@ -72,7 +72,7 @@
         <div class="stat-divider"></div>
         <div class="stat-item"><span class="stat-num">OSM</span><span class="stat-label">Formato</span></div>
         <div class="stat-divider"></div>
-        <div class="stat-item"><span class="stat-num">QGIS</span><span class="stat-label">Compativel</span></div>
+        <div class="stat-item"><span class="stat-num">QGIS</span><span class="stat-label">Compatível</span></div>
       </div>
     </div>
     <div class="hero-visual" id="hero-visual">
@@ -161,7 +161,7 @@
               <path d="M21 21l-4.35-4.35" />
             </svg>
             <input type="text" id="airport-search" class="map-search-input"
-              placeholder="Digite o codigo ICAO (ex: SBGR) ou nome do aeroporto..." autocomplete="off"
+              placeholder="Digite o código ICAO (ex: SBGR) ou nome do aeroporto..." autocomplete="off"
               spellcheck="false" />
             <button class="map-search-clear" id="map-search-clear" aria-label="Limpar">&#10005;</button>
           </div>
@@ -197,8 +197,8 @@
   <section class="section section-about" id="sobre">
     <div class="section-inner">
       <div class="section-header">
-        <h2 class="section-title gradient-text">O que e Ground Layout?</h2>
-        <p class="section-desc">O ground layout e a representacao visual do pavimento aeroportuario utilizada pelos
+        <h2 class="section-title gradient-text">O que é Ground Layout?</h2>
+        <p class="section-desc">O ground layout é a representação visual do pavimento aeroportuario utilizada pelos
           softwares de ATC no VATSIM. Criado a partir de dados do OpenStreetMap e processado no JOSM e QGIS.</p>
       </div>
       <div class="about-cards" id="about-cards">
@@ -211,8 +211,8 @@
             </svg>
           </div>
           <h3>JOSM</h3>
-          <p>Editor avancado do OpenStreetMap para desenhar e classificar poligonos do aeroporto com precisao
-            geografica.</p>
+          <p>Editor avançado do OpenStreetMap para desenhar e classificar polígonos do aeroporto com precisão
+            geográfica.</p>
         </div>
         <div class="about-card" id="about-card-osm">
           <div class="about-card-icon">
@@ -223,7 +223,7 @@
             </svg>
           </div>
           <h3>OpenStreetMap</h3>
-          <p>Base de dados geoespacial colaborativa com tags especificas para infraestrutura aeroportuaria mundial.</p>
+          <p>Base de dados geoespacial colaborativa com tags específicas para infraestrutura aeroportuária mundial.</p>
         </div>
         <div class="about-card" id="about-card-qgis">
           <div class="about-card-icon">
@@ -233,7 +233,7 @@
             </svg>
           </div>
           <h3>QGIS</h3>
-          <p>Sistema de Informacoes Geograficas que processa e renderiza os poligonos importados para ferramentas ATC.
+          <p>Sistema de Informações Geográficas que processa e renderiza os polígonos importados para ferramentas ATC.
           </p>
         </div>
       </div>
@@ -242,14 +242,14 @@
           <div class="ws-num">01</div>
           <div class="ws-content">
             <h4>Baixar dados OSM</h4>
-            <p>Download da area do aeroporto via API do OpenStreetMap</p>
+            <p>Download da área do aeroporto via API do OpenStreetMap</p>
           </div>
         </div>
         <div class="workflow-arrow">&#8594;</div>
         <div class="workflow-step" id="ws-2">
           <div class="ws-num">02</div>
           <div class="ws-content">
-            <h4>Classificar poligonos</h4>
+            <h4>Classificar polígonos</h4>
             <p>Aplicar as tags OSM corretas para cada elemento</p>
           </div>
         </div>
@@ -277,7 +277,7 @@
   <section class="section section-polygons" id="poligonos">
     <div class="section-inner">
       <div class="section-header">
-        <h2 class="section-title gradient-text">Classificacao de Poligonos</h2>
+        <h2 class="section-title gradient-text">Classificação de Polígonos</h2>
         <p class="section-desc">Cada elemento do aeroporto deve ser mapeado com a tag OSM correta.<br />Filtre por
           categoria para encontrar o que precisa.</p>
       </div>
@@ -294,13 +294,13 @@
           <div class="poly-card-header">
             <div class="poly-swatch" style="background:#c8b8a8;"></div>
             <div>
-              <h3 class="poly-title">Sitio Aeroportuario</h3><span class="poly-badge badge-infra">Infraestrutura</span>
+              <h3 class="poly-title">Sítio Aeroportuário</h3><span class="poly-badge badge-infra">Infraestrutura</span>
             </div>
           </div>
           <div class="poly-tags"><code>aeroway = aerodrome</code></div>
-          <p class="poly-desc">Delimita o perimetro total do aeroporto. E o poligono base sobre o qual todos os demais
-            elementos sao desenhados.</p>
-          <div class="poly-tip">&#9432; Desenhe primeiro &mdash; engloba toda a area do aeroporto</div>
+          <p class="poly-desc">Delimita o perímetro total do aeroporto. É o polígono base sobre o qual todos os demais
+            elementos são desenhados.</p>
+          <div class="poly-tip">&#9432; Desenhe primeiro &mdash; engloba toda a área do aeroporto</div>
         </div>
 
         <div class="poly-card" data-category="infra" id="poly-military">
@@ -308,12 +308,12 @@
           <div class="poly-card-header">
             <div class="poly-swatch" style="background:#7a8b68;"></div>
             <div>
-              <h3 class="poly-title">Area Militar</h3><span class="poly-badge badge-infra">Infraestrutura</span>
+              <h3 class="poly-title">Área Militar</h3><span class="poly-badge badge-infra">Infraestrutura</span>
             </div>
           </div>
           <div class="poly-tags"><code>landuse = military</code></div>
           <p class="poly-desc">Delimita zonas de uso exclusivamente militar dentro ou adjacentes ao aeroporto. Comum em
-            bases aereas mistas.</p>
+            bases aéreas mistas.</p>
           <div class="poly-tip">&#9432; Utilize em SBNT, SBUL e bases da FAB</div>
         </div>
 
@@ -322,14 +322,14 @@
           <div class="poly-card-header">
             <div class="poly-swatch" style="background:#558b5a;"></div>
             <div>
-              <h3 class="poly-title">Gramado / Vegetacao</h3><span class="poly-badge badge-natural">Natural</span>
+              <h3 class="poly-title">Gramado / Vegetação</h3><span class="poly-badge badge-natural">Natural</span>
             </div>
           </div>
           <div class="poly-tags">
             <code>landuse = grass</code><code>landuse = meadow</code><code>landuse = brownfield</code>
             <code>natural = wood</code><code>natural = scrub</code><code>natural = wetland</code>
           </div>
-          <p class="poly-desc">Areas verdes, gramados, campos nao pavimentados, vegetacao rasteira e zonas umidas ao
+          <p class="poly-desc">Áreas verdes, gramados, campos não pavimentados, vegetacao rasteira e zonas úmidas ao
             redor das pistas.</p>
           <div class="poly-tip">&#9432; Use multiplas tags conforme o tipo de vegetacao real</div>
         </div>
@@ -339,12 +339,12 @@
           <div class="poly-card-header">
             <div class="poly-swatch" style="background:#2471a3;"></div>
             <div>
-              <h3 class="poly-title">Agua</h3><span class="poly-badge badge-natural">Natural</span>
+              <h3 class="poly-title">Água</h3><span class="poly-badge badge-natural">Natural</span>
             </div>
           </div>
           <div class="poly-tags"><code>natural = water</code></div>
-          <p class="poly-desc">Corpos d'agua como lagos, lagoas, reservatorios e rios que fazem parte ou margeiam a area
-            aeroportuaria.</p>
+          <p class="poly-desc">Corpos d'água como lagos, lagoas, reservatórios e rios que fazem parte ou margeiam a area
+            aeroportuária.</p>
           <div class="poly-tip">&#9432; Importante para aeroportos como SBCT e SBFL</div>
         </div>
 
@@ -353,11 +353,11 @@
           <div class="poly-card-header">
             <div class="poly-swatch" style="background:#b7950b;"></div>
             <div>
-              <h3 class="poly-title">Area em Construcao</h3><span class="poly-badge badge-infra">Infraestrutura</span>
+              <h3 class="poly-title">Área em Construção</h3><span class="poly-badge badge-infra">Infraestrutura</span>
             </div>
           </div>
           <div class="poly-tags"><code>landuse = construction</code></div>
-          <p class="poly-desc">Zonas com obras em andamento, pavimentacao nova ou reformas dentro do perimetro
+          <p class="poly-desc">Zonas com obras em andamento, pavimentação nova ou reformas dentro do perímetro
             aeroportuario.</p>
           <div class="poly-tip">&#9432; Mantenha atualizado conforme progresso das obras</div>
         </div>
@@ -367,13 +367,13 @@
           <div class="poly-card-header">
             <div class="poly-swatch" style="background:#717d8a;"></div>
             <div>
-              <h3 class="poly-title">Patios (Apron)</h3><span class="poly-badge badge-op">Operacional</span>
+              <h3 class="poly-title">Pátios (Apron)</h3><span class="poly-badge badge-op">Operacional</span>
             </div>
           </div>
           <div class="poly-tags"><code>aeroway = apron</code></div>
           <p class="poly-desc">Area pavimentada onde aeronaves ficam estacionadas, passageiros embarcam/desembarcam e
-            carga e operada.</p>
-          <div class="poly-tip">&#9432; Separe patios de domestico, internacional e carga</div>
+            carga é operada.</p>
+          <div class="poly-tip">&#9432; Separe pátios de domestico, internacional e carga</div>
         </div>
 
         <div class="poly-card" data-category="infra" id="poly-buildings">
@@ -381,7 +381,7 @@
           <div class="poly-card-header">
             <div class="poly-swatch" style="background:#6c3483;"></div>
             <div>
-              <h3 class="poly-title">Predios / Edificacoes</h3><span
+              <h3 class="poly-title">Prédios / Edificações</h3><span
                 class="poly-badge badge-infra">Infraestrutura</span>
             </div>
           </div>
@@ -389,7 +389,7 @@
             <code>building = yes</code><code>aeroway = hangar</code><code>building = office</code>
             <code>building = public</code><code>building = roof</code><code>building = transportation</code>
           </div>
-          <p class="poly-desc">Todas as construcoes: terminais, hangares, torres, edificios administrativos e
+          <p class="poly-desc">Todas as construções: terminais, hangares, torres, edifícios administrativos e
             coberturas.</p>
           <div class="poly-tip">&#9432; Diferencie terminais de passageiros dos hangares</div>
         </div>
@@ -403,9 +403,9 @@
             </div>
           </div>
           <div class="poly-tags"><code>man_made = bridge</code></div>
-          <p class="poly-desc">Estruturas de conexao sobre obstaculos como vias, rios ou desniveis dentro da area
-            aeroportuaria.</p>
-          <div class="poly-tip">&#9432; Aplique tambem em pontes de embarque (fingers)</div>
+          <p class="poly-desc">Estruturas de conexão sobre obstáculos como vias, rios ou desníveis dentro da area
+            aeroportuária.</p>
+          <div class="poly-tip">&#9432; Aplique também em pontes de embarque (fingers)</div>
         </div>
 
         <div class="poly-card" data-category="operacional" id="poly-helipad">
@@ -417,9 +417,9 @@
             </div>
           </div>
           <div class="poly-tags"><code>aeroway = helipad</code></div>
-          <p class="poly-desc">Areas designadas para pouso e decolagem de helicopteros, podendo ser no solo ou em
-            coberturas de edificios.</p>
-          <div class="poly-tip">&#9432; Use como poligono ou no, conforme o tamanho</div>
+          <p class="poly-desc">Áreas designadas para pouso e decolagem de helicópteros, podendo ser no solo ou em
+            coberturas de edifícios.</p>
+          <div class="poly-tip">&#9432; Use como polígono ou nó, conforme o tamanho</div>
         </div>
 
         <div class="poly-card" data-category="operacional" id="poly-taxiway">
@@ -431,7 +431,7 @@
             </div>
           </div>
           <div class="poly-tags"><code>aeroway = taxiway</code></div>
-          <p class="poly-desc">Vias de taxiamento que conectam pistas de pouso/decolagem aos patios de estacionamento de
+          <p class="poly-desc">Vias de taxiamento que conectam pistas de pouso/decolagem aos pátios de estacionamento de
             aeronaves.</p>
           <div class="poly-tip">&#9432; Nomeie com ref= para identificar cada taxiway (ex: ref=A)</div>
         </div>
@@ -447,7 +447,7 @@
           <div class="poly-tags"><code>aeroway = parking_position</code></div>
           <p class="poly-desc">Posicoes de estacionamento individuais de aeronaves, incluindo gates de terminal e
             posicoes remotas.</p>
-          <div class="poly-tip">&#9432; Adicione ref= com o numero do gate (ex: ref=1, ref=A1)</div>
+          <div class="poly-tip">&#9432; Adicione ref= com o número do gate (ex: ref=1, ref=A1)</div>
         </div>
 
       </div>
@@ -479,7 +479,7 @@
                 <div class="sb-icon">&#11015;&#65039;</div>
                 <div>
                   <h4>1. Instalar o JOSM</h4>
-                  <p>Baixe a versao mais recente em <a href="https://josm.openstreetmap.de/" target="_blank"
+                  <p>Baixe a versão mais recente em <a href="https://josm.openstreetmap.de/" target="_blank"
                       rel="noopener">josm.openstreetmap.de</a>. Requer Java 11+.</p>
                 </div>
               </div>
@@ -525,15 +525,15 @@
                 <div class="sb-icon">&#128269;</div>
                 <div>
                   <h4>1. Localizar o aeroporto</h4>
-                  <p>Use <strong>Arquivo &rarr; Baixar Dados</strong> (Ctrl+Shift+Down) e pesquise pelo codigo ICAO ou
+                  <p>Use <strong>Arquivo &rarr; Baixar Dados</strong> (Ctrl+Shift+Down) e pesquise pelo código ICAO ou
                     nome do aeroporto.</p>
                 </div>
               </div>
               <div class="step-block">
                 <div class="sb-icon">&#128230;</div>
                 <div>
-                  <h4>2. Definir area de download</h4>
-                  <p>Delimite a area cobrindo todo o aeroporto com zona de seguranca de ~500m ao redor do perimetro.</p>
+                  <h4>2. Definir área de download</h4>
+                  <p>Delimite a área cobrindo todo o aeroporto com zona de segurança de ~500m ao redor do perímetro.</p>
                 </div>
               </div>
               <div class="step-block">
@@ -553,7 +553,7 @@
                 <div class="sb-icon">&#9992;&#65039;</div>
                 <div>
                   <h4>1. Comecar pelo aerodromo</h4>
-                  <p>Desenhe o poligono externo com <code>aeroway=aerodrome</code>. Este sera a base de todos os outros
+                  <p>Desenhe o polígono externo com <code>aeroway=aerodrome</code>. Este será a base de todos os outros
                     elementos.</p>
                 </div>
               </div>
@@ -561,7 +561,7 @@
                 <div class="sb-icon">&#128747;&#65039;</div>
                 <div>
                   <h4>2. Mapear pistas (runways)</h4>
-                  <p>Desenhe cada pista com <code>aeroway=runway</code>, adicionando <code>ref=</code> com a designacao
+                  <p>Desenhe cada pista com <code>aeroway=runway</code>, adicionando <code>ref=</code> com a designação
                     (ex: 10/28).</p>
                 </div>
               </div>
@@ -576,8 +576,8 @@
               <div class="step-block">
                 <div class="sb-icon">&#127960;&#65039;</div>
                 <div>
-                  <h4>4. Mapear patios e edificacoes</h4>
-                  <p>Adicione patios (<code>aeroway=apron</code>), terminais (<code>building=transportation</code>) e
+                  <h4>4. Mapear pátios e edificacoes</h4>
+                  <p>Adicione pátios (<code>aeroway=apron</code>), terminais (<code>building=transportation</code>) e
                     demais estruturas.</p>
                 </div>
               </div>
@@ -599,14 +599,14 @@
                 <div class="sb-icon">&#128279;</div>
                 <div>
                   <h4>2. Verificar conectividade</h4>
-                  <p>Certifique-se que todas as taxiways conectam corretamente as runways e patios do aeroporto.</p>
+                  <p>Certifique-se que todas as taxiways conectam corretamente as runways e pátios do aeroporto.</p>
                 </div>
               </div>
               <div class="step-block">
                 <div class="sb-icon">&#128203;</div>
                 <div>
-                  <h4>3. Checklist de tags obrigatorias</h4>
-                  <p>Todo elemento deve ter: tag principal, <code>name=</code> quando aplicavel, <code>ref=</code> para
+                  <h4>3. Checklist de tags obrigatórias</h4>
+                  <p>Todo elemento deve ter: tag principal, <code>name=</code> quando aplicável, <code>ref=</code> para
                     pistas/taxiways/gates.</p>
                 </div>
               </div>
@@ -646,13 +646,13 @@
         <div>
           <span class="footer-logo-text" style="font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px;">JOSM <span
               style="color: var(--primary);">Ground Guide</span></span><br />
-          <span class="footer-tagline">VATSIM Brasil &middot; Operacoes</span>
+          <span class="footer-tagline">VATSIM Brasil &middot; Operações</span>
         </div>
       </div>
       <div class="footer-links">
         <div class="footer-col" id="footer-col-guide">
           <h4>Guia</h4>
-          <a href="#sobre">Sobre</a><a href="#poligonos">Poligonos</a><a href="#tutorial">Tutorial</a>
+          <a href="#sobre">Sobre</a><a href="#poligonos">Polígonos</a><a href="#tutorial">Tutorial</a>
         </div>
         <div class="footer-col" id="footer-col-resources">
           <h4>Recursos</h4>
@@ -664,7 +664,7 @@
     </div>
     <div class="footer-bottom" id="footer-bottom">
       <p>&copy; 2026 JOSM Ground Guide &middot; Ailton Zamboi &middot; Feito com &#10084;&#65039; para a comunidade de
-        aviacao virtual</p>
+        aviação virtual</p>
     </div>
   </footer>
 
