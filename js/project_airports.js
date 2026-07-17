@@ -285,7 +285,7 @@ window.PROJECT_AIRPORTS = [
     "city": "Rio Largo / Maceió",
     "lat": -9.5109,
     "lng": -35.7917,
-    "status": "in_progress"
+    "status": "done"
   },
   {
     "icao": "SBJP",
@@ -317,7 +317,7 @@ window.PROJECT_AIRPORTS = [
     "city": "Santarém",
     "lat": -2.4247,
     "lng": -54.7858,
-    "status": "pending"
+    "status": "done"
   },
   {
     "icao": "SBAR",
@@ -325,7 +325,7 @@ window.PROJECT_AIRPORTS = [
     "city": "Aracaju",
     "lat": -10.984,
     "lng": -37.0703,
-    "status": "pending"
+    "status": "done"
   },
   {
     "icao": "SBJV",
@@ -341,7 +341,7 @@ window.PROJECT_AIRPORTS = [
     "city": "Brasil",
     "lat": 0,
     "lng": 0,
-    "status": "pending"
+    "status": "in_progress"
   },
   {
     "icao": "SBRB",
@@ -349,7 +349,7 @@ window.PROJECT_AIRPORTS = [
     "city": "Rio Branco",
     "lat": -9.8699,
     "lng": -67.8981,
-    "status": "pending"
+    "status": "in_progress"
   },
   {
     "icao": "SBLO",
@@ -397,7 +397,7 @@ window.PROJECT_AIRPORTS = [
     "city": "Macapá",
     "lat": 0.0507,
     "lng": -51.0722,
-    "status": "pending"
+    "status": "in_progress"
   },
   {
     "icao": "SBSR",
@@ -421,7 +421,7 @@ window.PROJECT_AIRPORTS = [
     "city": "Chapecó",
     "lat": -27.1342,
     "lng": -52.6562,
-    "status": "pending"
+    "status": "in_progress"
   },
   {
     "icao": "SBCX",

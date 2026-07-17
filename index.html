@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/style.css?v=11" />
+  <link rel="stylesheet" href="css/style.css?v=29" />
 </head>
 
 <body>
@@ -22,8 +22,7 @@
   <header class="navbar" id="navbar">
     <div class="navbar-inner">
       <a href="#hero" class="logo-link" id="logo-link">
-        <span class="logo-text" style="font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px;">JOSM <span
-            style="color: var(--primary);">Ground Guide</span></span>
+        <img class="brand-logo" src="josm_logo.png" alt="JOSM Ground Guide" />
       </a>
       <nav class="nav-links" id="nav-links">
         <a href="#sobre" class="nav-link">Sobre</a>
@@ -76,8 +75,11 @@
       </div>
     </div>
     <div class="hero-visual" id="hero-visual">
-      <div class="laptop-mockup" id="laptop-mockup">
+      <div class="laptop-mockup is-closed" id="laptop-mockup">
         <div class="laptop-screen-bezel">
+          <div class="laptop-lid-back" aria-hidden="true">
+            <img src="vatbrz_logowhite.png" alt="" />
+          </div>
           <div class="laptop-camera"></div>
           <div class="mockup-image-container">
             <div id="laptop-map"></div>
@@ -85,7 +87,7 @@
           </div>
         </div>
         <div class="laptop-base">
-          <div class="laptop-keyboard"></div>
+          <div class="laptop-keyboard" aria-hidden="true"></div>
           <div class="laptop-trackpad"></div>
           <div class="laptop-base-front">
             <div class="laptop-notch"></div>
@@ -116,7 +118,7 @@
               <polyline points="22 4 12 14.01 9 11.01"></polyline>
             </svg></div>
           <div class="p-stat-info">
-            <span class="p-stat-val">34</span>
+            <span class="p-stat-val" id="project-done-count">0</span>
             <span class="p-stat-label">Concluídos</span>
           </div>
         </div>
@@ -127,7 +129,7 @@
               <polyline points="12 6 12 12 16 14"></polyline>
             </svg></div>
           <div class="p-stat-info">
-            <span class="p-stat-val">5</span>
+            <span class="p-stat-val" id="project-wip-count">0</span>
             <span class="p-stat-label">Em Andamento</span>
           </div>
         </div>
@@ -139,16 +141,16 @@
               <line x1="12" y1="16" x2="12.01" y2="16"></line>
             </svg></div>
           <div class="p-stat-info">
-            <span class="p-stat-val">42</span>
+            <span class="p-stat-val" id="project-pending-count">0</span>
             <span class="p-stat-label">Na Fila</span>
           </div>
         </div>
       </div>
 
       <div class="progress-bar-overall">
-        <div class="progress-fill done" style="width: 41.97%"></div>
-        <div class="progress-fill wip" style="width: 6.17%"></div>
-        <div class="progress-fill pending" style="width: 51.85%"></div>
+        <div class="progress-fill done" id="project-done-progress"></div>
+        <div class="progress-fill wip" id="project-wip-progress"></div>
+        <div class="progress-fill pending" id="project-pending-progress"></div>
       </div>
 
       <div class="map-widget" id="map-widget" style="margin-top: 2rem;">
@@ -644,8 +646,7 @@
     <div class="footer-inner">
       <div class="footer-brand" id="footer-brand">
         <div>
-          <span class="footer-logo-text" style="font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px;">JOSM <span
-              style="color: var(--primary);">Ground Guide</span></span><br />
+          <img class="footer-brand-logo" src="josm_logo.png" alt="JOSM Ground Guide" />
           <span class="footer-tagline">VATSIM Brasil &middot; Operações</span>
         </div>
       </div>
@@ -671,7 +672,7 @@
   <script src="js/airports.js"></script>
   <script src="js/project_airports.js?v=2"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/script.js?v=18"></script>
+  <script src="js/script.js?v=25"></script>
 </body>
 
 </html>

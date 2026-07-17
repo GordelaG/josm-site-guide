@@ -205,6 +205,13 @@ code {
 }
 .mobile-link:hover { color: var(--text); }
 
+@keyframes mobile-menu-in {
+  from { opacity: 0; transform: translateY(-10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+body.menu-open { overflow: hidden; }
+
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    HERO
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
@@ -261,7 +268,8 @@ code {
 .hero-content {
   position: relative;
   z-index: 1;
-  flex: 1;
+  flex: 1 1 560px;
+  min-width: 0;
   max-width: 600px;
   padding: 4rem 0;
 }
@@ -390,27 +398,24 @@ code {
 
 .hero-visual {
   position: relative;
+  top: -45px;
   z-index: 1;
-  flex: 1.2;
+  flex: 0 1 520px;
   width: 100%;
-  max-width: 640px;
+  max-width: 520px;
   animation: fade-left 0.8s 0.2s ease both;
   perspective: 1000px;
 }
 
 .laptop-mockup {
   position: relative;
-  max-width: 640px;
+  max-width: 520px;
   width: 100%;
   margin: 0 auto;
-  transform: rotateX(20deg) rotateY(-15deg) rotateZ(0deg);
+  transform: rotateX(18deg) rotateY(-9deg) rotateZ(0deg);
   transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 500ms cubic-bezier(0.77, 0, 0.175, 1);
   z-index: 2;
-}
-
-.laptop-mockup:hover {
-  transform: rotateX(10deg) rotateY(-5deg) rotateZ(0deg) scale(1.02);
 }
 
 .laptop-screen-bezel {
@@ -421,6 +426,58 @@ code {
   border-bottom: 3px solid #000;
   position: relative;
   transform-style: preserve-3d;
+  transform-origin: bottom center;
+  transform: rotateX(0deg);
+  transition: transform 2500ms cubic-bezier(0.77, 0, 0.175, 1);
+  will-change: transform;
+  z-index: 3;
+}
+
+.brand-logo {
+  display: block;
+  width: auto;
+  height: 46px;
+  object-fit: contain;
+}
+
+.laptop-mockup.is-closed .laptop-screen-bezel {
+  transform: translateZ(6px) rotateX(-118deg) scaleY(0.84);
+}
+
+.laptop-mockup.is-open .laptop-screen-bezel {
+  transform: rotateX(0deg);
+}
+
+.laptop-lid-back {
+  position: absolute;
+  inset: -2px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #343b42;
+  border-radius: 16px 16px 4px 4px;
+  background: linear-gradient(145deg, #252b31 0%, #111519 55%, #090c0f 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 8px 24px rgba(0,0,0,0.45);
+  color: rgba(116, 203, 255, 0.34);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  transform: rotateX(180deg) translateZ(2px);
+  backface-visibility: hidden;
+  pointer-events: none;
+}
+
+.laptop-lid-back img {
+  display: block;
+  width: 44%;
+  max-width: 220px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+}
+
+.laptop-camera,
+.mockup-image-container {
+  backface-visibility: hidden;
 }
 
 .laptop-camera {
@@ -439,17 +496,18 @@ code {
 .laptop-base {
   position: absolute;
   top: 99.5%; /* Attach right below the screen */
-  left: -3%;
-  width: 106%; /* Base is slightly wider than screen */
+  left: 0;
+  width: 100%; /* Alinhada horizontalmente com a moldura da tela */
   height: 300px; /* Depth of the keyboard deck */
   background: linear-gradient(180deg, #24292e 0%, #15181a 100%);
   transform-origin: top center;
-  transform: rotateX(75deg); /* Hinge angle: open up to 105 degrees */
+  transform: rotateX(62deg); /* Inclinação que preserva a profundidade e a leitura das teclas */
   border-radius: 4px 4px 16px 16px;
   transform-style: preserve-3d;
   box-shadow: inset 0 2px 5px rgba(255,255,255,0.05), 0 50px 80px rgba(0,0,0,0.8);
   border: 1px solid #333;
   border-top: none;
+  z-index: 1;
 }
 
 .laptop-keyboard {
@@ -458,14 +516,68 @@ code {
   left: 8%;
   width: 84%;
   height: 45%;
-  background: #0a0c0e;
+  display: grid;
+  grid-template-columns: repeat(14, minmax(0, 1fr));
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+  gap: 5px;
+  padding: 7px;
+  background: #080a0c;
   border-radius: 4px;
-  /* Create a fake keyboard grid using CSS gradients */
-  background-image: 
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 24px 24px;
   box-shadow: inset 0 2px 10px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.05);
+  opacity: 0.28;
+  transition: opacity 300ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.laptop-key {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  border: 1px solid rgba(145, 205, 230, 0.13);
+  border-radius: 3px;
+  background: radial-gradient(circle at 50% 65%, rgba(0, 217, 255, 0.18), transparent 65%), linear-gradient(180deg, #171d22, #090c0f);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 2px 2px rgba(0,0,0,0.8), 0 0 4px rgba(0, 217, 255, 0.16);
+  color: #bcecff;
+  font-family: Inter, ui-monospace, monospace;
+  font-size: clamp(7px, 0.72vw, 10px);
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  text-shadow: 0 0 2px #00d9ff, 0 0 4px rgba(0, 217, 255, 0.75);
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0.2;
+  transition: opacity 180ms cubic-bezier(0.23, 1, 0.32, 1);
+  transition-delay: var(--key-delay, 0ms);
+}
+
+.laptop-mockup.is-open .laptop-keyboard {
+  opacity: 1;
+}
+
+.laptop-mockup.is-open .laptop-key {
+  opacity: 1;
+}
+
+@keyframes laptop-reduced-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-visual {
+    animation: laptop-reduced-fade 200ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  .laptop-key {
+    transition-delay: 0ms;
+  }
+}
+
+@media (min-width: 1101px) and (max-height: 750px) {
+  .hero-visual {
+    top: -150px;
+  }
 }
 
 .laptop-trackpad {
@@ -886,16 +998,20 @@ code {
   color: #74CBFF;
   border: 1px solid rgba(116,203,255,0.1);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
 }
 .poly-tags code::after {
-  content: "📋";
-  font-size: 0.7rem;
+  content: '';
+  width: 9px;
+  height: 11px;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+  box-shadow: -3px -3px 0 -1px currentColor;
   opacity: 0.5;
-  filter: grayscale(1);
+  flex: 0 0 auto;
 }
 .poly-tags code:hover {
   background: rgba(116,203,255,0.15);
@@ -910,7 +1026,13 @@ code {
   border-color: #29B473;
 }
 .poly-tags code.copied::after {
-  content: "✅";
+  width: 5px;
+  height: 9px;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  border-radius: 0;
+  box-shadow: none;
+  transform: rotate(45deg);
   opacity: 1;
 }
 
@@ -1314,14 +1436,32 @@ code {
     align-items: flex-start;
   }
   .hero-content { padding: 0; }
-  .hero-visual { align-self: center; }
+  .hero-visual { align-self: center; top: 0; }
   #airport-canvas { width: 100%; max-width: 480px; }
 }
 
 @media (max-width: 900px) {
   .about-cards { grid-template-columns: 1fr; }
-  .workflow { flex-direction: column; gap: 1rem; }
-  .workflow-arrow { transform: rotate(90deg); }
+  .workflow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 1.5rem 1.25rem;
+    overflow: hidden;
+  }
+  .workflow-step {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    width: 100%;
+    min-width: 0;
+    gap: 0.75rem;
+  }
+  .workflow-step .ws-num { text-align: right; }
+  .workflow-arrow {
+    align-self: center;
+    padding: 0;
+    transform: rotate(90deg);
+  }
   .tutorial-container {
     grid-template-columns: 1fr;
   }
@@ -1348,17 +1488,97 @@ code {
 }
 
 @media (max-width: 768px) {
+  .navbar {
+    position: fixed;
+    background: rgba(4, 13, 33, 0.88);
+    border-bottom: 1px solid rgba(116, 203, 255, 0.12);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
   .nav-links { display: none; }
   .btn-nav-primary { display: none; }
-  .hamburger { display: flex; }
+  .hamburger {
+    display: flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(116, 203, 255, 0.16);
+    border-radius: 12px;
+    background: rgba(36, 131, 197, 0.1);
+  }
+
+  .brand-logo { height: 40px; }
+
+  .mobile-menu {
+    position: fixed;
+    top: calc(var(--navbar-h) + 10px);
+    left: 12px;
+    right: 12px;
+    max-height: calc(100dvh - var(--navbar-h) - 22px);
+    overflow-y: auto;
+    padding: 0.75rem;
+    gap: 0.5rem;
+    border: 1px solid rgba(116, 203, 255, 0.18);
+    border-radius: 18px;
+    background:
+      linear-gradient(145deg, rgba(15, 43, 78, 0.98), rgba(4, 13, 33, 0.99) 58%),
+      #040d21;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  .mobile-menu.open {
+    display: flex;
+    animation: mobile-menu-in 220ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  .mobile-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    padding: 0.75rem 1rem 0.75rem 2.6rem;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.035);
+    color: rgba(255,255,255,0.82);
+    font-size: 0.95rem;
+    transition: color 150ms, background 150ms, border-color 150ms;
+  }
+
+  .mobile-link::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #29b473;
+    box-shadow: 0 0 10px rgba(41,180,115,0.75);
+  }
+
+  .mobile-link:active {
+    color: #fff;
+    background: rgba(36,131,197,0.18);
+    border-color: rgba(116,203,255,0.24);
+  }
+
+  .hero-visual { display: none; }
 
   .section { padding: 4rem 0; }
   .section-inner { padding: 0 1.25rem; }
 
   .hero {
+    min-height: auto;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
+    padding-bottom: 3rem;
   }
+
+  .hero-scroll-indicator { display: none; }
 
   .hero-title { font-size: 2rem; }
   .about-cards { grid-template-columns: 1fr; }
@@ -1370,6 +1590,10 @@ code {
   .footer-links { gap: 1.5rem; }
 
   .navbar-inner { padding: 0 1.25rem; }
+}
+
+@media (prefers-reduced-motion: reduce) and (max-width: 768px) {
+  .mobile-menu.open { animation: none; }
 }
 
 @media (max-width: 480px) {
@@ -1749,4 +1973,11 @@ code {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.footer-brand-logo {
+  display: block;
+  width: auto;
+  height: 52px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
 }

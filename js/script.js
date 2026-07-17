@@ -3,6 +3,80 @@
 ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â */
 
 // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Navbar scroll effect ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
+// Mantém o resumo sincronizado com os status de project_airports.js.
+function updateProjectProgress() {
+  const airports = Array.isArray(window.PROJECT_AIRPORTS) ? window.PROJECT_AIRPORTS : [];
+  const counts = airports.reduce((result, airport) => {
+    if (Object.hasOwn(result, airport.status)) result[airport.status] += 1;
+    return result;
+  }, { done: 0, in_progress: 0, pending: 0 });
+  const total = airports.length;
+
+  const setText = (id, value) => {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value;
+  };
+  const setWidth = (id, value) => {
+    const element = document.getElementById(id);
+    if (element) element.style.width = total ? `${(value / total) * 100}%` : '0%';
+  };
+
+  setText('project-done-count', counts.done);
+  setText('project-wip-count', counts.in_progress);
+  setText('project-pending-count', counts.pending);
+  setWidth('project-done-progress', counts.done);
+  setWidth('project-wip-progress', counts.in_progress);
+  setWidth('project-pending-progress', counts.pending);
+}
+
+updateProjectProgress();
+
+// Constrói o teclado e abre a tampa três segundos após a entrada no site.
+function initializeLaptopAnimation() {
+  const laptop = document.getElementById('laptop-mockup');
+  const keyboard = laptop?.querySelector('.laptop-keyboard');
+  if (!laptop || !keyboard) return;
+
+  const keyLabels = [
+    'Esc', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'Pwr',
+    '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Del',
+    'Tab', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\',
+    'Caps', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', "'", 'Enter', 'PgUp',
+    'Shift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/', 'Shift', 'Up', 'PgDn'
+  ];
+  const keys = document.createDocumentFragment();
+  keyLabels.forEach((label, index) => {
+    const key = document.createElement('span');
+    key.className = 'laptop-key';
+    key.style.setProperty('--key-delay', `${(index % 14) * 35}ms`);
+    key.textContent = label;
+    keys.appendChild(key);
+  });
+  keyboard.replaceChildren(keys);
+
+  const earliestOpening = performance.now() + 1000;
+  let hasOpened = false;
+  const openLaptop = () => {
+    if (hasOpened) return;
+    hasOpened = true;
+    laptop.classList.remove('is-closed');
+    laptop.classList.add('is-open');
+  };
+  const scheduleOpening = () => {
+    const remainingDelay = Math.max(300, earliestOpening - performance.now());
+    window.setTimeout(openLaptop, remainingDelay);
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    if (!entries.some(entry => entry.isIntersecting)) return;
+    observer.disconnect();
+    scheduleOpening();
+  }, { threshold: 0.25 });
+  observer.observe(laptop);
+}
+
+initializeLaptopAnimation();
+
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
   if (window.scrollY > 30) {
@@ -16,17 +90,26 @@ window.addEventListener('scroll', () => {
 const hamburger = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobile-menu');
 
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
-  mobileMenu.classList.toggle('open');
-});
+function setMobileMenu(open) {
+  hamburger.classList.toggle('open', open);
+  mobileMenu.classList.toggle('open', open);
+  hamburger.setAttribute('aria-expanded', String(open));
+  hamburger.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+  document.body.classList.toggle('menu-open', open);
+}
+
+hamburger.setAttribute('aria-expanded', 'false');
+hamburger.addEventListener('click', () => setMobileMenu(!mobileMenu.classList.contains('open')));
 
 // Close mobile menu on link click
 mobileMenu.querySelectorAll('.mobile-link').forEach(link => {
   link.addEventListener('click', () => {
-    hamburger.classList.remove('open');
-    mobileMenu.classList.remove('open');
+    setMobileMenu(false);
   });
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') setMobileMenu(false);
 });
 
 // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Smooth nav active state ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
