@@ -21,6 +21,7 @@ import {
   Radar,
   Sparkles,
   Rss,
+  History as HistoryIcon,
 } from 'lucide-react';
 
 export default function AtualizacoesPage() {
@@ -608,7 +609,7 @@ export default function AtualizacoesPage() {
                 borderRadius: '16px',
               }}
             >
-              <History size={40} color="rgba(255, 255, 255, 0.3)" style={{ margin: '0 auto 1rem' }} />
+              <HistoryIcon size={40} color="rgba(255, 255, 255, 0.3)" style={{ margin: '0 auto 1rem' }} />
               <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#fff', marginBottom: '0.5rem' }}>
                 Nenhuma atualização encontrada
               </h3>
