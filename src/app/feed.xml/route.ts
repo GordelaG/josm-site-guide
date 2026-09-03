@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
-import { getAirportsOnce } from '@/lib/airports-service';
-import { Airport, AirportUpdate } from '@/types/airport';
+import { getAirportsOnce } from '../../lib/airports-service';
+import { Airport, AirportUpdate } from '../../types/airport';
 
 export const dynamic = 'force-dynamic';
 
