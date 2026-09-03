@@ -7,27 +7,7 @@ export const INITIAL_AIRPORTS: Airport[] = [
     city: "Guarulhos / São Paulo",
     lat: -23.4356,
     lng: -46.4731,
-    status: "done",
-    version: "v1.2.0",
-    lastUpdateTitle: "Vetorização Completa de Pátios e Taxiways T3",
-    lastUpdateDescription: "Atualização das linhas centrais das taxiways B, C, D e expansão do pátio 3 conforme layout oficial DECEA.",
-    updatesHistory: [
-      {
-        version: "v1.2.0",
-        title: "Vetorização Completa de Pátios e Taxiways T3",
-        description: "Alinhamento das posições remotas e reconfiguração dos pontos de espera da pista 10L/28R.",
-        date: "2026-08-28T14:30:00Z",
-        author: "Equipe VATBRZ",
-        afterImageUrl: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1200",
-      },
-      {
-        version: "v1.0.0",
-        title: "Lançamento Inicial da Base Cartográfica de Guarulhos",
-        description: "Vetorização inicial das pistas 10L/28R e 10R/28L com taxilines principais.",
-        date: "2026-07-15T10:00:00Z",
-        author: "Equipe VATBRZ",
-      }
-    ]
+    status: "done"
   },
   {
     icao: "SBSP",
@@ -35,20 +15,7 @@ export const INITIAL_AIRPORTS: Airport[] = [
     city: "São Paulo",
     lat: -23.6261,
     lng: -46.6564,
-    status: "done",
-    version: "v1.1.0",
-    lastUpdateTitle: "Adequação dos Boxes e Áreas de Giro",
-    lastUpdateDescription: "Ajuste na numeração dos gates do terminal principal e novas marcações de taxiway H e M.",
-    updatesHistory: [
-      {
-        version: "v1.1.0",
-        title: "Adequação dos Boxes e Áreas de Giro",
-        description: "Revisão dos pontos de parada das aeronaves categoria C e taxilane de saída rápida.",
-        date: "2026-08-20T18:00:00Z",
-        author: "Operações VATBRZ",
-        afterImageUrl: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1200",
-      }
-    ]
+    status: "done"
   },
   {
     icao: "SBRJ",
@@ -56,19 +23,7 @@ export const INITIAL_AIRPORTS: Airport[] = [
     city: "Rio de Janeiro",
     lat: -22.9105,
     lng: -43.1631,
-    status: "done",
-    version: "v1.0.5",
-    lastUpdateTitle: "Refinamento das Pistas 02R/20L e 02L/20R",
-    lastUpdateDescription: "Correção milimétrica dos limites de cabeceira sobre a Baía de Guanabara.",
-    updatesHistory: [
-      {
-        version: "v1.0.5",
-        title: "Refinamento das Pistas 02R/20L e 02L/20R",
-        description: "Ajuste fino de aproximação visual e marcações do pátio comercial.",
-        date: "2026-08-10T12:00:00Z",
-        author: "Equipe VATBRZ",
-      }
-    ]
+    status: "done"
   },
   {
     icao: "SBBR",
@@ -76,19 +31,7 @@ export const INITIAL_AIRPORTS: Airport[] = [
     city: "Brasília",
     lat: -15.8711,
     lng: -47.9186,
-    status: "done",
-    version: "v1.0.0",
-    lastUpdateTitle: "Vetorização dos Píeres Norte e Sul",
-    lastUpdateDescription: "Mapeamento completo dos píeres de embarque e pistas paralelas 11R/29L e 11L/29R.",
-    updatesHistory: [
-      {
-        version: "v1.0.0",
-        title: "Vetorização dos Píeres Norte e Sul",
-        description: "Mapeamento completo dos píeres de embarque e pistas paralelas.",
-        date: "2026-07-25T16:00:00Z",
-        author: "Operações VATBRZ",
-      }
-    ]
+    status: "done"
   },
   {
     icao: "SBGL",
