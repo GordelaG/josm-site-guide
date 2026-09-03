@@ -31,13 +31,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const clerkKey =
-    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
-    'pk_test_ZXhhbXBsZS5jbGVyay5hY2NvdW50cy5kZXYk';
-
   return (
     <ClerkProvider
-      publishableKey={clerkKey}
       localization={ptBR}
       appearance={{
         layout: {
