@@ -28,5 +28,10 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "typescript": "^5.8.2"
+  },
+  "allowScripts": {
+    "@clerk/shared": true,
+    "@firebase/util": true,
+    "protobufjs": true
   }
 }
