@@ -75,14 +75,22 @@ export function subscribeToAirports(
             });
           });
 
-          // Preenche aeroportos faltantes do dataset base caso existam
-          const merged = INITIAL_AIRPORTS.map((base) => {
-            const fromCloud = list.find((item) => item.icao === base.icao);
+          // Combina dados do Firestore com os aeroportos base
+          const cloudMap = new Map(list.map((item) => [item.icao, item]));
+          const merged: Airport[] = INITIAL_AIRPORTS.map((base) => {
+            const fromCloud = cloudMap.get(base.icao);
             if (fromCloud) return fromCloud;
             return {
               ...base,
               version: base.status === 'done' ? 'v1.0.0' : undefined,
             };
+          });
+
+          // Inclui também qualquer aeroporto que esteja no Firestore mas não no INITIAL_AIRPORTS
+          list.forEach((item) => {
+            if (!INITIAL_AIRPORTS.some((base) => base.icao === item.icao)) {
+              merged.push(item);
+            }
           });
 
           localAirportsCache = merged;
@@ -142,13 +150,20 @@ export async function getAirportsOnce(): Promise<Airport[]> {
       });
     });
 
-    const merged = INITIAL_AIRPORTS.map((base) => {
-      const fromCloud = list.find((item) => item.icao === base.icao);
+    const cloudMap = new Map(list.map((item) => [item.icao, item]));
+    const merged: Airport[] = INITIAL_AIRPORTS.map((base) => {
+      const fromCloud = cloudMap.get(base.icao);
       if (fromCloud) return fromCloud;
       return {
         ...base,
         version: base.status === 'done' ? 'v1.0.0' : undefined,
       };
+    });
+
+    list.forEach((item) => {
+      if (!INITIAL_AIRPORTS.some((base) => base.icao === item.icao)) {
+        merged.push(item);
+      }
     });
 
     localAirportsCache = merged;
@@ -191,7 +206,7 @@ export async function updateAirport(
   });
 
   if (!db) {
-    return true; // Local update succeeded
+    throw new Error('Firebase desconectado. Configure NEXT_PUBLIC_FIREBASE_API_KEY no painel da Vercel.');
   }
 
   try {
@@ -278,7 +293,9 @@ export async function completeAirportWithRelease(
     return ap;
   });
 
-  if (!db) return true;
+  if (!db) {
+    throw new Error('Firebase desconectado. Configure NEXT_PUBLIC_FIREBASE_API_KEY no painel da Vercel.');
+  }
 
   try {
     const airportDoc = doc(db, COLLECTION_NAME, icao);
@@ -363,7 +380,9 @@ export async function addAirportUpdate(
     return ap;
   });
 
-  if (!db) return true;
+  if (!db) {
+    throw new Error('Firebase desconectado. Configure NEXT_PUBLIC_FIREBASE_API_KEY no painel da Vercel.');
+  }
 
   try {
     const airportDoc = doc(db, COLLECTION_NAME, icao);
@@ -443,7 +462,9 @@ export async function editAirportUpdate(
     return ap;
   });
 
-  if (!db) return true;
+  if (!db) {
+    throw new Error('Firebase desconectado. Configure NEXT_PUBLIC_FIREBASE_API_KEY no painel da Vercel.');
+  }
 
   try {
     const airportDoc = doc(db, COLLECTION_NAME, icao);
@@ -496,7 +517,9 @@ export async function deleteAirportUpdate(
     return ap;
   });
 
-  if (!db) return true;
+  if (!db) {
+    throw new Error('Firebase desconectado. Configure NEXT_PUBLIC_FIREBASE_API_KEY no painel da Vercel.');
+  }
 
   try {
     const airportDoc = doc(db, COLLECTION_NAME, icao);
