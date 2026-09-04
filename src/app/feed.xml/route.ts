@@ -50,17 +50,18 @@ export async function GET(request: NextRequest) {
       const afterImg = toAbsoluteUrl(update.afterImageUrl || update.imageUrl);
       const isValidHttpUrl = (url: string) => url.startsWith('http://') || url.startsWith('https://');
 
-      // Detailed HTML content for Discord MonitoRSS and RSS readers (driving visitors to site)
-      const htmlContent = `
-        <div>
-          <p><strong>Aeródromo:</strong> ${escapeXml(airport.name)} (${escapeXml(airport.icao)}) - ${escapeXml(airport.city)}</p>
-          <p><strong>Versão:</strong> ${escapeXml(update.version)} | <strong>Autor:</strong> ${escapeXml(author)}</p>
-          <p><strong>Notas da Atualização:</strong></p>
-          <p>${escapeXml(update.description)}</p>
-          <p>✨ <strong>Comparativo Interativo do Solo:</strong></p>
-          <p><a href="${escapeXml(postUrl)}">👉 <strong>Clique aqui para conferir as fotos e o comparativo interativo no Portal VATBRZ Operações</strong></a></p>
-        </div>
-      `.trim();
+      // Discord Markdown format matching the Discord preview modal exactly
+      const discordDescription = [
+        update.description,
+        '',
+        '✨ **Comparativo Interativo do Solo:**',
+        'Veja as alterações detalhadas com o slider interativo no portal:',
+        `👉 **[Clique aqui para conferir o comparativo no site](${postUrl})**`,
+        '',
+        `📍 **Aeródromo:** ${airport.name} (${airport.icao})`,
+        `🏷️ **Versão:** ${update.version}`,
+        `👤 **Autor:** ${author}`,
+      ].join('\n');
 
       return `
     <item>
@@ -69,9 +70,10 @@ export async function GET(request: NextRequest) {
       <guid isPermaLink="false">${escapeXml(guid)}</guid>
       <pubDate>${pubDate}</pubDate>
       <dc:creator><![CDATA[${author}]]></dc:creator>
-      <category><![CDATA[Cenários e Solos]]></category>
-      <description><![CDATA[${htmlContent}]]></description>
-      <content:encoded><![CDATA[${htmlContent}]]></content:encoded>
+      <category><![CDATA[${airport.name} (${airport.icao})]]></category>
+      <description><![CDATA[${discordDescription}]]></description>
+      <content:encoded><![CDATA[${discordDescription}]]></content:encoded>
+      ${isValidHttpUrl(afterImg) ? `<enclosure url="${escapeXml(afterImg)}" length="0" type="image/jpeg" />\n      <media:content url="${escapeXml(afterImg)}" medium="image" />` : ''}
     </item>`;
     })
     .join('\n');
