@@ -444,6 +444,8 @@ export default function AtualizacoesPage() {
                               letterSpacing: '-0.01em',
                               lineHeight: 1.25,
                               margin: '0 0 0.4rem 0',
+                              wordBreak: 'break-word',
+                              overflowWrap: 'anywhere',
                             }}
                           >
                             {update.title}
@@ -515,7 +517,10 @@ export default function AtualizacoesPage() {
                         fontSize: '0.95rem',
                         lineHeight: 1.7,
                         color: 'rgba(226, 232, 240, 0.9)',
-                        whiteSpace: 'pre-line',
+                        whiteSpace: 'pre-wrap',
+                        wordBreak: 'break-word',
+                        overflowWrap: 'anywhere',
+                        maxWidth: '100%',
                       }}
                     >
                       {update.description}

@@ -582,7 +582,7 @@ export const AirportUpdateModal: React.FC<AirportUpdateModalProps> = ({
                       </div>
                     </div>
 
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.5, margin: 0 }}>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.5, margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
                       {item.description}
                     </p>
 

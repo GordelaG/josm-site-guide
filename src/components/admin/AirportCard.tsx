@@ -764,7 +764,7 @@ export const AirportCard: React.FC<AirportCardProps> = ({
                     </span>
                   )}
                   {airport.notes && (
-                    <span style={{ fontStyle: 'italic', color: 'var(--text-muted)' }}>
+                    <span style={{ fontStyle: 'italic', color: 'var(--text-muted)', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
                       {airport.notes}
                     </span>
                   )}
