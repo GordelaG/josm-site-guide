@@ -50,18 +50,17 @@ export async function GET(request: NextRequest) {
       const afterImg = toAbsoluteUrl(update.afterImageUrl || update.imageUrl);
       const isValidHttpUrl = (url: string) => url.startsWith('http://') || url.startsWith('https://');
 
-      // Discord Markdown format matching the Discord preview modal exactly
-      const discordDescription = [
-        update.description,
-        '',
-        '✨ **Comparativo Interativo do Solo:**',
-        'Veja as alterações detalhadas com o slider interativo no portal:',
-        `👉 **[Clique aqui para conferir o comparativo no site](${postUrl})**`,
-        '',
-        `📍 **Aeródromo:** ${airport.name} (${airport.icao})`,
-        `🏷️ **Versão:** ${update.version}`,
-        `👤 **Autor:** ${author}`,
-      ].join('\n');
+      // Convert any internal newlines in update.description to <br />
+      const formattedDesc = (update.description || '').replace(/\r?\n/g, '<br />\n');
+
+      // Discord-compatible format with explicit <br /> tags for Readybot and RSS parsers
+      const discordDescription = `${formattedDesc}<br /><br />\n\n` +
+        `✨ **Comparativo Interativo do Solo:**<br />\n` +
+        `Veja as alterações detalhadas com o slider interativo no portal:<br />\n` +
+        `👉 **[Clique aqui para conferir o comparativo no site](${postUrl})**<br /><br />\n\n` +
+        `📍 **Aeródromo:** ${airport.name} (${airport.icao})<br />\n` +
+        `🏷️ **Versão:** ${update.version}<br />\n` +
+        `👤 **Autor:** ${author}`;
 
       return `
     <item>
