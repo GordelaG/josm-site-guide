@@ -2,22 +2,25 @@
 
 import React, { useState } from 'react';
 import { Airport, AirportStatus } from '../../types/airport';
-import { Check, Clock, Edit3, MessageSquare, Save, User, X, Sparkles, MapPin, CheckCircle2, Hourglass } from 'lucide-react';
+import { Check, Clock, Edit3, MessageSquare, Save, User, X, Sparkles, MapPin, CheckCircle2, Hourglass, ArrowUpDown, ChevronDown } from 'lucide-react';
 import { AirportInitialReleaseModal } from './AirportInitialReleaseModal';
 
 interface AirportCardProps {
   airport: Airport;
   onUpdateStatus: (icao: string, status: AirportStatus, notes?: string, assignedTo?: string) => Promise<void>;
   onOpenUpdateModal?: (airport: Airport) => void;
+  onPublishSuccess?: (info: { icao: string; version: string; title: string }) => void;
 }
 
 export const AirportCard: React.FC<AirportCardProps> = ({
   airport,
   onUpdateStatus,
   onOpenUpdateModal,
+  onPublishSuccess,
 }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditingMeta, setIsEditingMeta] = useState(false);
+  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
   const [showInitialReleaseModal, setShowInitialReleaseModal] = useState(false);
   const [notes, setNotes] = useState(airport.notes || '');
   const [assignedTo, setAssignedTo] = useState(airport.assignedTo || '');
@@ -59,6 +62,9 @@ export const AirportCard: React.FC<AirportCardProps> = ({
         airport={airport}
         isOpen={showInitialReleaseModal}
         onClose={() => setShowInitialReleaseModal(false)}
+        onSuccess={(info) => {
+          if (onPublishSuccess) onPublishSuccess(info);
+        }}
       />
 
       <div
@@ -157,41 +163,163 @@ export const AirportCard: React.FC<AirportCardProps> = ({
         <div>
           {isDone ? (
             /* Layout quando Concluído */
-            <button
-              type="button"
-              disabled={isSaving}
-              onClick={() => onOpenUpdateModal && onOpenUpdateModal(airport)}
-              style={{
-                width: '100%',
-                background: 'linear-gradient(135deg, #0054DB, #1d6bf3)',
-                border: '1px solid rgba(56, 189, 248, 0.45)',
-                color: '#ffffff',
-                padding: '0.55rem 1rem',
-                borderRadius: '8px',
-                fontSize: '0.825rem',
-                fontWeight: 800,
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.45rem',
-                boxShadow: '0 4px 14px rgba(0, 84, 219, 0.35)',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-1px)';
-                e.currentTarget.style.boxShadow = '0 6px 18px rgba(0, 84, 219, 0.5)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 14px rgba(0, 84, 219, 0.35)';
-              }}
-            >
-              <Sparkles size={14} color="#38bdf8" />
-              <span>Versões & Notas</span>
-            </button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
+              <button
+                type="button"
+                disabled={isSaving}
+                onClick={() => onOpenUpdateModal && onOpenUpdateModal(airport)}
+                style={{
+                  width: '100%',
+                  background: 'linear-gradient(135deg, #0054DB, #1d6bf3)',
+                  border: '1px solid rgba(56, 189, 248, 0.45)',
+                  color: '#ffffff',
+                  padding: '0.55rem 1rem',
+                  borderRadius: '8px',
+                  fontSize: '0.825rem',
+                  fontWeight: 800,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 14px rgba(0, 84, 219, 0.35)',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                  e.currentTarget.style.boxShadow = '0 6px 18px rgba(0, 84, 219, 0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(0, 84, 219, 0.35)';
+                }}
+              >
+                <span>VERSÕES &amp; NOTAS</span>
+              </button>
+
+              {/* Botão e Dropdown para Alterar Status */}
+              <div style={{ position: 'relative', width: '100%' }}>
+                <button
+                  type="button"
+                  disabled={isSaving}
+                  onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}
+                  style={{
+                    width: '100%',
+                    background: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    padding: '0.45rem 0.85rem',
+                    borderRadius: '7px',
+                    fontSize: '0.78rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+                    e.currentTarget.style.color = '#fff';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                    <ArrowUpDown size={12} color="#38bdf8" />
+                    <span>Alterar Status</span>
+                  </div>
+                  <ChevronDown
+                    size={13}
+                    style={{
+                      transform: isStatusDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                      transition: 'transform 0.2s ease',
+                    }}
+                  />
+                </button>
+
+                {isStatusDropdownOpen && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 'calc(100% + 4px)',
+                      left: 0,
+                      right: 0,
+                      zIndex: 40,
+                      background: '#0d131f',
+                      border: '1px solid rgba(255, 255, 255, 0.15)',
+                      borderRadius: '8px',
+                      padding: '0.35rem',
+                      boxShadow: '0 12px 32px rgba(0, 0, 0, 0.85)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.25rem',
+                    }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleStatusChange('in_progress');
+                        setIsStatusDropdownOpen(false);
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        width: '100%',
+                        padding: '0.45rem 0.65rem',
+                        borderRadius: '6px',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#f59e0b',
+                        fontSize: '0.78rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        transition: 'background 0.15s ease',
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(245, 158, 11, 0.15)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      <Clock size={13} />
+                      <span>Voltar para Em Andamento</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleStatusChange('pending');
+                        setIsStatusDropdownOpen(false);
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        width: '100%',
+                        padding: '0.45rem 0.65rem',
+                        borderRadius: '6px',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#ef4444',
+                        fontSize: '0.78rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        transition: 'background 0.15s ease',
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      <Hourglass size={13} />
+                      <span>Voltar para Na Fila</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
           ) : isPending ? (
             /* Layout quando Na Fila */
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>

@@ -68,7 +68,7 @@ export const AdminStats: React.FC<AdminStatsProps> = ({ counts }) => {
         return (
           <div
             key={stat.label}
-            className="glass-card sheen"
+            className="glass-card"
             style={{
               padding: '1.25rem 1.4rem',
               display: 'flex',

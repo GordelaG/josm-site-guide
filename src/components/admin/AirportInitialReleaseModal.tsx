@@ -10,7 +10,7 @@ interface AirportInitialReleaseModalProps {
   airport: Airport;
   isOpen: boolean;
   onClose: () => void;
-  onSuccess?: () => void;
+  onSuccess?: (info: { icao: string; version: string; title: string }) => void;
   currentUserEmail?: string;
 }
 
@@ -82,7 +82,13 @@ export const AirportInitialReleaseModal: React.FC<AirportInitialReleaseModalProp
         assignedTo: author.trim() || airport.assignedTo,
       });
 
-      if (onSuccess) onSuccess();
+      if (onSuccess) {
+        onSuccess({
+          icao: airport.icao,
+          version: 'v1.0.0',
+          title: title.trim(),
+        });
+      }
       onClose();
     } catch (err: unknown) {
       console.error(err);
@@ -277,6 +283,29 @@ export const AirportInitialReleaseModal: React.FC<AirportInitialReleaseModalProp
               />
             </div>
 
+            {/* Author Field */}
+            <div>
+              <label className="label-technical" style={{ display: 'block', marginBottom: '0.4rem' }}>
+                Autor da Alteração / Lançamento:
+              </label>
+              <input
+                type="text"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+                placeholder="Nome do autor..."
+                style={{
+                  width: '100%',
+                  background: '#121722',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '8px',
+                  padding: '0.65rem 0.85rem',
+                  color: '#fff',
+                  fontSize: '0.875rem',
+                  outline: 'none',
+                }}
+              />
+            </div>
+
             {/* Changelog Description Field */}
             <div>
               <label className="label-technical" style={{ display: 'block', marginBottom: '0.4rem' }}>
@@ -411,7 +440,7 @@ export const AirportInitialReleaseModal: React.FC<AirportInitialReleaseModalProp
                     <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase' }}>
                       🟢 Foto DEPOIS (Novo Desenho)
                     </span>
-                    <span style={{ fontSize: '0.68rem', color: '#10b981', fontWeight: 700 }}>Recomendado</span>
+                    <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Opcional</span>
                   </div>
 
                   <input

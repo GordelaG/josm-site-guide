@@ -3,6 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import Link from 'next/link';
 import { useUser, useAuth } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { Airport, AirportStatus } from '../../types/airport';
@@ -18,7 +19,7 @@ import { AdminHeader } from '../../components/admin/AdminHeader';
 import { AdminStats } from '../../components/admin/AdminStats';
 import { AirportCard } from '../../components/admin/AirportCard';
 import { AirportUpdateModal } from '../../components/admin/AirportUpdateModal';
-import { Download, RefreshCw, Search, Sparkles, SlidersHorizontal, Radar } from 'lucide-react';
+import { Download, RefreshCw, Search, Sparkles, SlidersHorizontal, CheckCircle2, ExternalLink, Clock } from 'lucide-react';
 
 export default function AdminDashboardPage() {
   const { user } = useUser();
@@ -31,6 +32,30 @@ export default function AdminDashboardPage() {
   const [statusFilter, setStatusFilter] = useState<'all' | AirportStatus>('all');
   const [selectedAirportForUpdate, setSelectedAirportForUpdate] = useState<Airport | null>(null);
   const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
+
+  // Modal de sucesso de publicação com cronômetro de 7s
+  const [publishedModal, setPublishedModal] = useState<{
+    icao: string;
+    version: string;
+    title: string;
+  } | null>(null);
+  const [countdown, setCountdown] = useState<number>(7);
+
+  // Efeito do cronômetro de 7 segundos para fechar o modal de publicação
+  useEffect(() => {
+    if (!publishedModal) return;
+
+    if (countdown <= 0) {
+      setPublishedModal(null);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [publishedModal, countdown]);
 
   // Redireciona para /sign-in se não estiver autenticado
   useEffect(() => {
@@ -109,19 +134,28 @@ export default function AdminDashboardPage() {
       version: string;
       title: string;
       description: string;
+      author?: string;
       imageUrl?: string;
       beforeImageUrl?: string;
       afterImageUrl?: string;
     }
   ) => {
     const userIdentifier = user?.fullName || user?.primaryEmailAddress?.emailAddress || 'Admin';
+    const authorToUse = updateData.author?.trim() || userIdentifier;
     try {
       await addAirportUpdate(icao, {
         ...updateData,
-        author: userIdentifier,
+        author: authorToUse,
       });
 
-      showToast(`Atualização ${updateData.version} do aeroporto ${icao} publicada com sucesso!`, 'success');
+      // Fecha o modal de versões e abre o popup central com contagem de 7 segundos
+      setSelectedAirportForUpdate(null);
+      setPublishedModal({
+        icao,
+        version: updateData.version,
+        title: updateData.title,
+      });
+      setCountdown(7);
     } catch (err: any) {
       console.error(err);
       showToast(err?.message || `Erro ao salvar atualização de ${icao}`, 'error');
@@ -135,16 +169,18 @@ export default function AdminDashboardPage() {
     updatedData: {
       title: string;
       description: string;
+      author?: string;
       imageUrl?: string;
       beforeImageUrl?: string;
       afterImageUrl?: string;
     }
   ) => {
     const userIdentifier = user?.fullName || user?.primaryEmailAddress?.emailAddress || 'Admin';
+    const authorToUse = updatedData.author?.trim() || userIdentifier;
     try {
       await editAirportUpdate(icao, targetVersion, {
         ...updatedData,
-        author: userIdentifier,
+        author: authorToUse,
       });
       showToast(`Nota da versão ${targetVersion} de ${icao} atualizada com sucesso!`, 'success');
     } catch (err: any) {
@@ -233,6 +269,179 @@ export default function AdminDashboardPage() {
         </div>
       )}
 
+      {/* POPUP MODAL CENTRAL DE SUCESSO DE PUBLICAÇÃO COM CRONÔMETRO DE 7 SEGUNDOS */}
+      {publishedModal && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 20000,
+            background: 'rgba(5, 8, 14, 0.88)',
+            backdropFilter: 'blur(16px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1.5rem',
+            animation: 'fade-up 0.25s ease',
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setPublishedModal(null);
+          }}
+        >
+          <div
+            className="glass-card"
+            style={{
+              maxWidth: '520px',
+              width: '100%',
+              background: '#0c1017',
+              border: '1px solid rgba(16, 185, 129, 0.45)',
+              borderRadius: '18px',
+              padding: '2.25rem 2rem',
+              textAlign: 'center',
+              boxShadow: '0 24px 72px rgba(0, 0, 0, 0.9), 0 0 35px rgba(16, 185, 129, 0.2)',
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            {/* Success Icon */}
+            <div
+              style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                background: 'rgba(16, 185, 129, 0.15)',
+                border: '2px solid #10b981',
+                color: '#10b981',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '1.25rem',
+                boxShadow: '0 0 24px rgba(16, 185, 129, 0.35)',
+              }}
+            >
+              <CheckCircle2 size={36} />
+            </div>
+
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                background: 'rgba(16, 185, 129, 0.12)',
+                border: '1px solid rgba(16, 185, 129, 0.35)',
+                borderRadius: '999px',
+                padding: '0.2rem 0.75rem',
+                color: '#10b981',
+                fontSize: '0.72rem',
+                fontFamily: 'var(--font-mono)',
+                fontWeight: 800,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                marginBottom: '0.75rem',
+              }}
+            >
+              <span>Publicação Concluída</span>
+            </div>
+
+            <h2
+              style={{
+                fontSize: '1.65rem',
+                fontWeight: 900,
+                letterSpacing: '-0.02em',
+                color: '#fff',
+                margin: '0 0 0.45rem 0',
+              }}
+            >
+              {publishedModal.icao} &bull; {publishedModal.version}
+            </h2>
+
+            <p
+              style={{
+                color: '#38bdf8',
+                fontSize: '0.95rem',
+                fontWeight: 700,
+                margin: '0 0 0.5rem 0',
+                maxWidth: '420px',
+              }}
+            >
+              {publishedModal.title}
+            </p>
+
+            <p
+              style={{
+                color: 'var(--text-secondary)',
+                fontSize: '0.85rem',
+                lineHeight: 1.5,
+                margin: '0 0 1.75rem 0',
+                maxWidth: '400px',
+              }}
+            >
+              A versão foi publicada com sucesso e já está visível para os pilotos e controladores.
+            </p>
+
+            {/* Action Buttons */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%' }}>
+              <Link
+                href={`/atualizacoes#update-${publishedModal.icao}`}
+                target="_blank"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.55rem',
+                  background: 'linear-gradient(135deg, #0054DB, #1d6bf3)',
+                  border: '1px solid rgba(56, 189, 248, 0.45)',
+                  color: '#ffffff',
+                  padding: '0.8rem 1.25rem',
+                  borderRadius: '10px',
+                  fontSize: '0.9rem',
+                  fontWeight: 800,
+                  textDecoration: 'none',
+                  boxShadow: '0 4px 16px rgba(0, 84, 219, 0.4)',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                <ExternalLink size={16} />
+                <span>Ver Anúncio no Feed Público</span>
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => setPublishedModal(null)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  color: 'rgba(255, 255, 255, 0.85)',
+                  padding: '0.7rem 1.25rem',
+                  borderRadius: '10px',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.currentTarget.style.color = '#fff';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.85)';
+                }}
+              >
+                <Clock size={14} color="#38bdf8" />
+                <span>Concluir ({countdown}s)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Modal de Atualização de Versão */}
       <AirportUpdateModal
         airport={selectedAirportForUpdate}
@@ -255,12 +464,6 @@ export default function AdminDashboardPage() {
       >
         {/* Title and Top Header */}
         <div style={{ marginBottom: '2rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
-            <Radar size={20} color="#38bdf8" />
-            <span className="label-technical" style={{ color: '#38bdf8' }}>
-              Gestão de Vetorização &bull; VATSIM Brasil
-            </span>
-          </div>
           <h1
             style={{
               fontSize: 'clamp(2rem, 3.5vw, 2.75rem)',
@@ -389,6 +592,10 @@ export default function AdminDashboardPage() {
                 airport={airport}
                 onUpdateStatus={handleUpdateStatus}
                 onOpenUpdateModal={(ap) => setSelectedAirportForUpdate(ap)}
+                onPublishSuccess={(info) => {
+                  setPublishedModal(info);
+                  setCountdown(7);
+                }}
               />
             ))}
           </div>

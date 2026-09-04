@@ -38,7 +38,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ isCloudConnected }) =>
           gap: '1.5rem',
         }}
       >
-        {/* Brand Logo & Admin Status Chip */}
+        {/* Brand Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
             <img
@@ -47,35 +47,6 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ isCloudConnected }) =>
               style={{ height: '40px', width: 'auto', objectFit: 'contain' }}
             />
           </Link>
-
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.45rem',
-              background: 'rgba(0, 84, 219, 0.12)',
-              border: '1px solid rgba(56, 189, 248, 0.35)',
-              borderRadius: '999px',
-              padding: '0.25rem 0.75rem',
-              color: '#38bdf8',
-              fontSize: '0.7rem',
-              fontFamily: 'var(--font-mono)',
-              fontWeight: 800,
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-            }}
-          >
-            <span
-              style={{
-                width: '6px',
-                height: '6px',
-                borderRadius: '50%',
-                background: isCloudConnected ? '#10b981' : '#f59e0b',
-                boxShadow: isCloudConnected ? '0 0 8px #10b981' : '0 0 8px #f59e0b',
-              }}
-            />
-            <span>{isCloudConnected ? 'FIREBASE ONLINE' : 'MODO LOCAL'} &bull; PAINEL ADMIN</span>
-          </div>
         </div>
 
         {/* Navigation Actions */}

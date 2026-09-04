@@ -32,6 +32,7 @@ interface AirportUpdateModalProps {
       version: string;
       title: string;
       description: string;
+      author?: string;
       imageUrl?: string;
       beforeImageUrl?: string;
       afterImageUrl?: string;
@@ -43,6 +44,7 @@ interface AirportUpdateModalProps {
     updatedData: {
       title: string;
       description: string;
+      author?: string;
       imageUrl?: string;
       beforeImageUrl?: string;
       afterImageUrl?: string;
@@ -89,12 +91,14 @@ export const AirportUpdateModal: React.FC<AirportUpdateModalProps> = ({
   const [version, setVersion] = useState(defaultNextVersion);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [author, setAuthor] = useState(currentUser || 'Admin');
   const [beforeImage, setBeforeImage] = useState<string | null>(null);
   const [afterImage, setAfterImage] = useState<string | null>(null);
 
   // Form states for editing
   const [editTitle, setEditTitle] = useState('');
   const [editDescription, setEditDescription] = useState('');
+  const [editAuthor, setEditAuthor] = useState('');
   const [editBeforeImage, setEditBeforeImage] = useState<string | null>(null);
   const [editAfterImage, setEditAfterImage] = useState<string | null>(null);
 
@@ -143,6 +147,7 @@ export const AirportUpdateModal: React.FC<AirportUpdateModalProps> = ({
         version: version.trim().startsWith('v') ? version.trim() : `v${version.trim()}`,
         title: title.trim(),
         description: description.trim(),
+        author: author.trim() || currentUser || 'Admin',
         beforeImageUrl: beforeImage || undefined,
         afterImageUrl: afterImage || undefined,
         imageUrl: afterImage || beforeImage || undefined,
@@ -165,6 +170,7 @@ export const AirportUpdateModal: React.FC<AirportUpdateModalProps> = ({
     setEditingItem(item);
     setEditTitle(item.title);
     setEditDescription(item.description);
+    setEditAuthor(item.author || currentUser || 'Admin');
     setEditBeforeImage(item.beforeImageUrl || null);
     setEditAfterImage(item.afterImageUrl || item.imageUrl || null);
     setViewMode('edit');
@@ -188,6 +194,7 @@ export const AirportUpdateModal: React.FC<AirportUpdateModalProps> = ({
       await onEditUpdate(airport.icao, editingItem.version, {
         title: editTitle.trim(),
         description: editDescription.trim(),
+        author: editAuthor.trim() || currentUser || 'Admin',
         beforeImageUrl: editBeforeImage || undefined,
         afterImageUrl: editAfterImage || undefined,
         imageUrl: editAfterImage || editBeforeImage || undefined,
@@ -682,16 +689,18 @@ export const AirportUpdateModal: React.FC<AirportUpdateModalProps> = ({
                   </label>
                   <input
                     type="text"
-                    disabled
-                    value={currentUser}
+                    value={author}
+                    onChange={(e) => setAuthor(e.target.value)}
+                    placeholder="Nome do autor..."
                     style={{
                       width: '100%',
-                      background: '#0f141d',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      background: '#121722',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
                       borderRadius: '8px',
                       padding: '0.65rem 0.85rem',
-                      color: 'rgba(255, 255, 255, 0.65)',
+                      color: '#fff',
                       fontSize: '0.85rem',
+                      outline: 'none',
                     }}
                   />
                 </div>
@@ -760,9 +769,12 @@ export const AirportUpdateModal: React.FC<AirportUpdateModalProps> = ({
                       background: 'rgba(239, 68, 68, 0.03)',
                     }}
                   >
-                    <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ef4444', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>
-                      🔴 Print ANTES
-                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ef4444', textTransform: 'uppercase' }}>
+                        🔴 Print ANTES
+                      </span>
+                      <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Opcional</span>
+                    </div>
 
                     <input
                       type="file"
@@ -831,9 +843,12 @@ export const AirportUpdateModal: React.FC<AirportUpdateModalProps> = ({
                       background: 'rgba(16, 185, 129, 0.03)',
                     }}
                   >
-                    <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>
-                      🟢 Print DEPOIS
-                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase' }}>
+                        🟢 Print DEPOIS
+                      </span>
+                      <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Opcional</span>
+                    </div>
 
                     <input
                       type="file"
@@ -978,6 +993,28 @@ export const AirportUpdateModal: React.FC<AirportUpdateModalProps> = ({
 
               <div>
                 <label className="label-technical" style={{ display: 'block', marginBottom: '0.4rem' }}>
+                  Autor da Alteração:
+                </label>
+                <input
+                  type="text"
+                  value={editAuthor}
+                  onChange={(e) => setEditAuthor(e.target.value)}
+                  placeholder="Nome do autor..."
+                  style={{
+                    width: '100%',
+                    background: '#121722',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '8px',
+                    padding: '0.65rem 0.85rem',
+                    color: '#fff',
+                    fontSize: '0.85rem',
+                    outline: 'none',
+                  }}
+                />
+              </div>
+
+              <div>
+                <label className="label-technical" style={{ display: 'block', marginBottom: '0.4rem' }}>
                   Descrição das Alterações:
                 </label>
                 <textarea
@@ -1016,9 +1053,12 @@ export const AirportUpdateModal: React.FC<AirportUpdateModalProps> = ({
                       background: 'rgba(239, 68, 68, 0.03)',
                     }}
                   >
-                    <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ef4444', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>
-                      🔴 Print ANTES
-                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ef4444', textTransform: 'uppercase' }}>
+                        🔴 Print ANTES
+                      </span>
+                      <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Opcional</span>
+                    </div>
 
                     <input
                       type="file"
@@ -1087,9 +1127,12 @@ export const AirportUpdateModal: React.FC<AirportUpdateModalProps> = ({
                       background: 'rgba(16, 185, 129, 0.03)',
                     }}
                   >
-                    <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>
-                      🟢 Print DEPOIS
-                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase' }}>
+                        🟢 Print DEPOIS
+                      </span>
+                      <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Opcional</span>
+                    </div>
 
                     <input
                       type="file"
