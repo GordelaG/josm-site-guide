@@ -80,6 +80,7 @@ export const AirportCard: React.FC<AirportCardProps> = ({
           borderLeft: `3px solid ${statusColor}`,
           opacity: isSaving ? 0.65 : 1,
           transition: 'all 0.2s ease',
+          overflow: 'visible',
         }}
       >
         {/* Top Header */}
@@ -199,18 +200,18 @@ export const AirportCard: React.FC<AirportCardProps> = ({
               </button>
 
               {/* Botão e Dropdown para Alterar Status */}
-              <div style={{ position: 'relative', width: '100%' }}>
+              <div style={{ width: '100%' }}>
                 <button
                   type="button"
                   disabled={isSaving}
                   onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}
                   style={{
                     width: '100%',
-                    background: 'rgba(255, 255, 255, 0.04)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    color: 'rgba(255, 255, 255, 0.8)',
-                    padding: '0.45rem 0.85rem',
-                    borderRadius: '7px',
+                    background: isStatusDropdownOpen ? 'rgba(56, 189, 248, 0.1)' : 'rgba(255, 255, 255, 0.04)',
+                    border: `1px solid ${isStatusDropdownOpen ? 'rgba(56, 189, 248, 0.35)' : 'rgba(255, 255, 255, 0.12)'}`,
+                    color: isStatusDropdownOpen ? '#38bdf8' : 'rgba(255, 255, 255, 0.8)',
+                    padding: '0.5rem 0.85rem',
+                    borderRadius: '8px',
                     fontSize: '0.78rem',
                     fontWeight: 700,
                     cursor: 'pointer',
@@ -220,12 +221,14 @@ export const AirportCard: React.FC<AirportCardProps> = ({
                     transition: 'all 0.15s ease',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-                    e.currentTarget.style.color = '#fff';
+                    e.currentTarget.style.background = 'rgba(56, 189, 248, 0.15)';
+                    e.currentTarget.style.color = '#38bdf8';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
-                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
+                    if (!isStatusDropdownOpen) {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+                      e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
+                    }
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
@@ -244,23 +247,20 @@ export const AirportCard: React.FC<AirportCardProps> = ({
                 {isStatusDropdownOpen && (
                   <div
                     style={{
-                      position: 'absolute',
-                      top: 'calc(100% + 4px)',
-                      left: 0,
-                      right: 0,
-                      zIndex: 40,
-                      background: '#0d131f',
-                      border: '1px solid rgba(255, 255, 255, 0.15)',
+                      marginTop: '0.45rem',
+                      background: 'rgba(5, 8, 14, 0.75)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
                       borderRadius: '8px',
-                      padding: '0.35rem',
-                      boxShadow: '0 12px 32px rgba(0, 0, 0, 0.85)',
+                      padding: '0.45rem',
                       display: 'flex',
                       flexDirection: 'column',
-                      gap: '0.25rem',
+                      gap: '0.35rem',
+                      animation: 'fade-up 0.15s ease',
                     }}
                   >
                     <button
                       type="button"
+                      disabled={isSaving}
                       onClick={() => {
                         handleStatusChange('in_progress');
                         setIsStatusDropdownOpen(false);
@@ -270,19 +270,19 @@ export const AirportCard: React.FC<AirportCardProps> = ({
                         alignItems: 'center',
                         gap: '0.5rem',
                         width: '100%',
-                        padding: '0.45rem 0.65rem',
+                        padding: '0.55rem 0.75rem',
                         borderRadius: '6px',
-                        border: 'none',
-                        background: 'transparent',
+                        border: '1px solid rgba(245, 158, 11, 0.35)',
+                        background: 'rgba(245, 158, 11, 0.12)',
                         color: '#f59e0b',
                         fontSize: '0.78rem',
                         fontWeight: 700,
                         cursor: 'pointer',
                         textAlign: 'left',
-                        transition: 'background 0.15s ease',
+                        transition: 'all 0.15s ease',
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(245, 158, 11, 0.15)')}
-                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(245, 158, 11, 0.25)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(245, 158, 11, 0.12)')}
                     >
                       <Clock size={13} />
                       <span>Voltar para Em Andamento</span>
@@ -290,6 +290,7 @@ export const AirportCard: React.FC<AirportCardProps> = ({
 
                     <button
                       type="button"
+                      disabled={isSaving}
                       onClick={() => {
                         handleStatusChange('pending');
                         setIsStatusDropdownOpen(false);
@@ -299,19 +300,19 @@ export const AirportCard: React.FC<AirportCardProps> = ({
                         alignItems: 'center',
                         gap: '0.5rem',
                         width: '100%',
-                        padding: '0.45rem 0.65rem',
+                        padding: '0.55rem 0.75rem',
                         borderRadius: '6px',
-                        border: 'none',
-                        background: 'transparent',
-                        color: '#ef4444',
+                        border: '1px solid rgba(239, 68, 68, 0.35)',
+                        background: 'rgba(239, 68, 68, 0.12)',
+                        color: '#ff7b72',
                         fontSize: '0.78rem',
                         fontWeight: 700,
                         cursor: 'pointer',
                         textAlign: 'left',
-                        transition: 'background 0.15s ease',
+                        transition: 'all 0.15s ease',
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)')}
-                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.25)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.12)')}
                     >
                       <Hourglass size={13} />
                       <span>Voltar para Na Fila</span>
