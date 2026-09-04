@@ -75,9 +75,9 @@ export const AirportInitialReleaseModal: React.FC<AirportInitialReleaseModalProp
         version: 'v1.0.0',
         title: title.trim(),
         description: description.trim(),
-        beforeImageUrl: beforeImage || undefined,
-        afterImageUrl: afterImage || undefined,
-        imageUrl: afterImage || beforeImage || undefined,
+        beforeImageUrl: beforeImage || '',
+        afterImageUrl: afterImage || '',
+        imageUrl: afterImage || beforeImage || '',
         author: author.trim() || 'Operações VATBRZ',
         assignedTo: author.trim() || airport.assignedTo,
       });

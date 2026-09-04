@@ -175,6 +175,47 @@ export async function getAirportsOnce(): Promise<Airport[]> {
 }
 
 /**
+ * Garante que nenhum campo de atualização contenha `undefined`, substituindo por string vazia.
+ */
+export function cleanUpdate(u: AirportUpdate): AirportUpdate {
+  return {
+    version: u.version || 'v1.0.0',
+    title: u.title || '',
+    description: u.description || '',
+    date: u.date || new Date().toISOString(),
+    author: u.author || 'Admin',
+    imageUrl: u.imageUrl || '',
+    beforeImageUrl: u.beforeImageUrl || '',
+    afterImageUrl: u.afterImageUrl || '',
+  };
+}
+
+/**
+ * Sanitiza recursivamente qualquer objeto antes de enviar ao Firestore,
+ * convertendo valores `undefined` para `''` (ou null), evitando o erro do Firestore:
+ * "Unsupported field value: undefined".
+ */
+export function sanitizeDocData<T>(obj: T): T {
+  if (obj === undefined) return '' as any;
+  if (obj === null) return null as any;
+  if (Array.isArray(obj)) {
+    return obj.map((item) => sanitizeDocData(item)) as any;
+  }
+  if (typeof obj === 'object') {
+    const res: Record<string, any> = {};
+    for (const [key, value] of Object.entries(obj)) {
+      if (value === undefined) {
+        res[key] = '';
+      } else {
+        res[key] = sanitizeDocData(value);
+      }
+    }
+    return res as any;
+  }
+  return obj;
+}
+
+/**
  * Atualiza o status e informações de um aeroporto no Firestore.
  */
 export async function updateAirport(
@@ -214,7 +255,7 @@ export async function updateAirport(
 
     await setDoc(
       airportDoc,
-      {
+      sanitizeDocData({
         icao,
         name: existing?.name || icao,
         city: existing?.city || '',
@@ -226,7 +267,7 @@ export async function updateAirport(
         updatedBy: payload.updatedBy || 'Administrador',
         notes: payload.notes || '',
         assignedTo: payload.assignedTo || ''
-      },
+      }),
       { merge: true }
     );
 
@@ -257,20 +298,21 @@ export async function completeAirportWithRelease(
   const existing = localAirportsCache.find((ap) => ap.icao === icao);
   const previousHistory = existing?.updatesHistory || [];
 
-  const effectiveAfterImage = payload.afterImageUrl || payload.imageUrl;
+  const effectiveAfterImage = payload.afterImageUrl || payload.imageUrl || '';
+  const effectiveBeforeImage = payload.beforeImageUrl || '';
 
-  const newUpdate: AirportUpdate = {
+  const newUpdate: AirportUpdate = cleanUpdate({
     version: payload.version,
     title: payload.title,
     description: payload.description,
     imageUrl: effectiveAfterImage,
-    beforeImageUrl: payload.beforeImageUrl,
+    beforeImageUrl: effectiveBeforeImage,
     afterImageUrl: effectiveAfterImage,
     date: new Date().toISOString(),
     author: payload.author || 'Admin',
-  };
+  });
 
-  const updatedHistory = [newUpdate, ...previousHistory.filter((u) => u.version !== payload.version)];
+  const updatedHistory = [newUpdate, ...previousHistory.filter((u) => u.version !== payload.version)].map(cleanUpdate);
 
   // Update local memory cache
   localAirportsCache = localAirportsCache.map((ap) => {
@@ -282,7 +324,7 @@ export async function completeAirportWithRelease(
         lastUpdateTitle: payload.title,
         lastUpdateDescription: payload.description,
         lastUpdateImageUrl: effectiveAfterImage,
-        lastUpdateBeforeImageUrl: payload.beforeImageUrl,
+        lastUpdateBeforeImageUrl: effectiveBeforeImage,
         updatesHistory: updatedHistory,
         updatedAt: new Date().toISOString(),
         updatedBy: payload.author || 'Admin',
@@ -301,7 +343,7 @@ export async function completeAirportWithRelease(
     const airportDoc = doc(db, COLLECTION_NAME, icao);
     await setDoc(
       airportDoc,
-      {
+      sanitizeDocData({
         icao,
         name: existing?.name || icao,
         city: existing?.city || '',
@@ -311,14 +353,14 @@ export async function completeAirportWithRelease(
         version: payload.version,
         lastUpdateTitle: payload.title,
         lastUpdateDescription: payload.description,
-        lastUpdateImageUrl: effectiveAfterImage || '',
-        lastUpdateBeforeImageUrl: payload.beforeImageUrl || '',
+        lastUpdateImageUrl: effectiveAfterImage,
+        lastUpdateBeforeImageUrl: effectiveBeforeImage,
         updatesHistory: updatedHistory,
         updatedAt: new Date().toISOString(),
         updatedBy: payload.author || 'Admin',
         notes: payload.notes ?? existing?.notes ?? '',
         assignedTo: payload.assignedTo ?? existing?.assignedTo ?? '',
-      },
+      }),
       { merge: true }
     );
 
@@ -344,22 +386,23 @@ export async function addAirportUpdate(
     author?: string;
   }
 ): Promise<boolean> {
-  const effectiveAfterImage = payload.afterImageUrl || payload.imageUrl;
+  const effectiveAfterImage = payload.afterImageUrl || payload.imageUrl || '';
+  const effectiveBeforeImage = payload.beforeImageUrl || '';
 
-  const newUpdate: AirportUpdate = {
+  const newUpdate: AirportUpdate = cleanUpdate({
     version: payload.version,
     title: payload.title,
     description: payload.description,
     imageUrl: effectiveAfterImage,
-    beforeImageUrl: payload.beforeImageUrl,
+    beforeImageUrl: effectiveBeforeImage,
     afterImageUrl: effectiveAfterImage,
     date: new Date().toISOString(),
     author: payload.author || 'Admin',
-  };
+  });
 
   const existing = localAirportsCache.find((ap) => ap.icao === icao);
   const previousHistory = existing?.updatesHistory || [];
-  const updatedHistory = [newUpdate, ...previousHistory];
+  const updatedHistory = [newUpdate, ...previousHistory].map(cleanUpdate);
 
   // Update in-memory cache
   localAirportsCache = localAirportsCache.map((ap) => {
@@ -371,7 +414,7 @@ export async function addAirportUpdate(
         lastUpdateTitle: payload.title,
         lastUpdateDescription: payload.description,
         lastUpdateImageUrl: effectiveAfterImage,
-        lastUpdateBeforeImageUrl: payload.beforeImageUrl,
+        lastUpdateBeforeImageUrl: effectiveBeforeImage,
         updatesHistory: updatedHistory,
         updatedAt: new Date().toISOString(),
         updatedBy: payload.author || 'Admin',
@@ -389,17 +432,17 @@ export async function addAirportUpdate(
 
     await setDoc(
       airportDoc,
-      {
+      sanitizeDocData({
         status: 'done',
         version: payload.version,
         lastUpdateTitle: payload.title,
         lastUpdateDescription: payload.description,
-        lastUpdateImageUrl: effectiveAfterImage || '',
-        lastUpdateBeforeImageUrl: payload.beforeImageUrl || '',
+        lastUpdateImageUrl: effectiveAfterImage,
+        lastUpdateBeforeImageUrl: effectiveBeforeImage,
         updatesHistory: updatedHistory,
         updatedAt: new Date().toISOString(),
         updatedBy: payload.author || 'Admin',
-      },
+      }),
       { merge: true }
     );
 
@@ -428,21 +471,22 @@ export async function editAirportUpdate(
   const existing = localAirportsCache.find((ap) => ap.icao === icao);
   const history = existing?.updatesHistory || [];
 
-  const effectiveAfterImage = payload.afterImageUrl !== undefined ? payload.afterImageUrl : payload.imageUrl;
+  const effectiveAfterImage = (payload.afterImageUrl !== undefined ? payload.afterImageUrl : payload.imageUrl) || '';
+  const effectiveBeforeImage = payload.beforeImageUrl || '';
 
   const updatedHistory = history.map((item) => {
     if (item.version === targetVersion) {
-      return {
+      return cleanUpdate({
         ...item,
-        title: payload.title,
-        description: payload.description,
-        imageUrl: effectiveAfterImage !== undefined ? effectiveAfterImage : item.imageUrl,
-        afterImageUrl: effectiveAfterImage !== undefined ? effectiveAfterImage : item.afterImageUrl,
-        beforeImageUrl: payload.beforeImageUrl !== undefined ? payload.beforeImageUrl : item.beforeImageUrl,
-        author: payload.author || item.author,
-      };
+        title: payload.title || item.title,
+        description: payload.description || item.description,
+        imageUrl: effectiveAfterImage || item.imageUrl || '',
+        afterImageUrl: effectiveAfterImage || item.afterImageUrl || '',
+        beforeImageUrl: effectiveBeforeImage || item.beforeImageUrl || '',
+        author: payload.author || item.author || 'Admin',
+      });
     }
-    return item;
+    return cleanUpdate(item);
   });
 
   const latest = updatedHistory[0];
@@ -470,14 +514,14 @@ export async function editAirportUpdate(
     const airportDoc = doc(db, COLLECTION_NAME, icao);
     await setDoc(
       airportDoc,
-      {
+      sanitizeDocData({
         lastUpdateTitle: latest?.title || '',
         lastUpdateDescription: latest?.description || '',
         lastUpdateImageUrl: latest?.afterImageUrl || latest?.imageUrl || '',
         lastUpdateBeforeImageUrl: latest?.beforeImageUrl || '',
         updatesHistory: updatedHistory,
         updatedAt: new Date().toISOString(),
-      },
+      }),
       { merge: true }
     );
     return true;
@@ -497,7 +541,7 @@ export async function deleteAirportUpdate(
   const existing = localAirportsCache.find((ap) => ap.icao === icao);
   const history = existing?.updatesHistory || [];
 
-  const filteredHistory = history.filter((item) => item.version !== versionToDelete);
+  const filteredHistory = history.filter((item) => item.version !== versionToDelete).map(cleanUpdate);
   const latest = filteredHistory[0];
   const newActiveVersion = latest?.version || 'v1.0.0';
 
@@ -525,7 +569,7 @@ export async function deleteAirportUpdate(
     const airportDoc = doc(db, COLLECTION_NAME, icao);
     await setDoc(
       airportDoc,
-      {
+      sanitizeDocData({
         version: newActiveVersion,
         lastUpdateTitle: latest?.title || '',
         lastUpdateDescription: latest?.description || '',
@@ -533,7 +577,7 @@ export async function deleteAirportUpdate(
         lastUpdateBeforeImageUrl: latest?.beforeImageUrl || '',
         updatesHistory: filteredHistory,
         updatedAt: new Date().toISOString(),
-      },
+      }),
       { merge: true }
     );
     return true;

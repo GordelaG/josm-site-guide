@@ -148,9 +148,9 @@ export const AirportUpdateModal: React.FC<AirportUpdateModalProps> = ({
         title: title.trim(),
         description: description.trim(),
         author: author.trim() || currentUser || 'Admin',
-        beforeImageUrl: beforeImage || undefined,
-        afterImageUrl: afterImage || undefined,
-        imageUrl: afterImage || beforeImage || undefined,
+        beforeImageUrl: beforeImage || '',
+        afterImageUrl: afterImage || '',
+        imageUrl: afterImage || beforeImage || '',
       });
       setTitle('');
       setDescription('');
@@ -195,9 +195,9 @@ export const AirportUpdateModal: React.FC<AirportUpdateModalProps> = ({
         title: editTitle.trim(),
         description: editDescription.trim(),
         author: editAuthor.trim() || currentUser || 'Admin',
-        beforeImageUrl: editBeforeImage || undefined,
-        afterImageUrl: editAfterImage || undefined,
-        imageUrl: editAfterImage || editBeforeImage || undefined,
+        beforeImageUrl: editBeforeImage || '',
+        afterImageUrl: editAfterImage || '',
+        imageUrl: editAfterImage || editBeforeImage || '',
       });
       setEditingItem(null);
       setViewMode('list');
